@@ -74,13 +74,41 @@ WHERE first_name = 'Aline';
     */
 
 
+CREATE TABLE Faculty (
+    faculty_id INT AUTO_INCREMENT PRIMARY KEY,
+    faculty_name VARCHAR(100) NOT NULL,
+    dean_name VARCHAR(100) NOT NULL,
+    office_location VARCHAR(100),
+    contact_email VARCHAR(100) UNIQUE,
+    established_year YEAR
+);
 
+ Insert at least 5 sample rows
 
+INSERT INTO Faculty (faculty_name, dean_name, office_location, contact_email, established_year)
+VALUES
+('Faculty of Engineering', 'Dr. John Smith', 'Block A', 'engineering@university.edu', 2010),
+('Faculty of Business', 'Dr. Mary Johnson', 'Block B', 'business@university.edu', 2008),
+('Faculty of Science', 'Dr. Peter Brown', 'Block C', 'science@university.edu', 2012),
+('Faculty of Education', 'Dr. Grace Williams', 'Block D', 'education@university.edu', 2005),
+('Faculty of Law', 'Dr. David Wilson', 'Block E', 'law@university.edu', 2015);
 
+ UPDATE statement
 
+UPDATE Faculty
+SET office_location = 'Block F'
+WHERE faculty_id = 2;
 
+ DELETE statement
 
+DELETE FROM Faculty
+WHERE faculty_id = 5;
 
+ SELECT statement with a WHERE clause
+
+SELECT *
+FROM Faculty
+WHERE established_year > 2009;
 
 
 
