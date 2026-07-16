@@ -59,6 +59,39 @@ WHERE first_name = 'Aline';
 
 
 
+CREATE TABLE Classroom (
+    classroom_id INT AUTO_INCREMENT PRIMARY KEY,
+    room_number VARCHAR(10) NOT NULL,
+    building_name VARCHAR(50) NOT NULL,
+    capacity INT NOT NULL,
+    floor INT NOT NULL
+);
+
+INSERT INTO Classroom (room_number, building_name, capacity, floor)
+VALUES
+('A101', 'Main Building', 40, 1),
+('A102', 'Main Building', 35, 1),
+('B201', 'Science Block', 50, 2),
+('C301', 'Engineering Block', 60, 3),
+('D401', 'Business Block', 45, 4);
+
+
+UPDATE Classroom
+SET capacity = 55
+WHERE classroom_id = 3;
+
+DELETE FROM Classroom
+WHERE classroom_id = 5;
+
+SELECT *
+FROM Classroom
+WHERE capacity >= 40;
+
+
+
+
+
+
 
 
 
@@ -69,8 +102,7 @@ WHERE first_name = 'Aline';
 
 
 /* 
-   SECTION 3 - FACULTY (Rebecca)
-   Branch: faculty-rebecca
+   SECTION 3 
     */
 
 
