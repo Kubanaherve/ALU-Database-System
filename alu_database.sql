@@ -27,7 +27,23 @@ USE NESA;
 /* 
    SECTION 2 - CLASSROOM (Cynthia)
    Branch: classroom-cynthia
-   */
+   */CREATE TABLE Classroom (
+    classroom_id INT PRIMARY KEY,
+    classroom_name VARCHAR(50),
+    capacity INT,
+building VARCHAR(100)
+INSERT INTO Classroom (classroom_id, classroom_name, capacity, building) VALUES
+(1, 'Amahoro Hall', 40, 'Block A'),
+(2, 'Kigali Room', 35, 'Block B'),
+(3, 'Virunga Hall', 50, 'Block C'),
+(4, 'Akagera Room', 30, 'Block A'),
+(5, 'Muhabura Hall', 45, 'Block D');
+
+
+
+);
+
+
 
 
 
@@ -42,8 +58,7 @@ USE NESA;
 
 
 /* 
-   SECTION 3 - FACULTY (Rebecca)
-   Branch: faculty-rebecca
+   SECTION 3 
     */
 
 
