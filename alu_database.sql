@@ -38,8 +38,16 @@ INSERT INTO Classroom (classroom_id, classroom_name, capacity, building) VALUES
 (3, 'Virunga Hall', 50, 'Block C'),
 (4, 'Akagera Room', 30, 'Block A'),
 (5, 'Muhabura Hall', 45, 'Block D');
+-- Cynthia: Update one classroom
 
+UPDATE Classroom
+SET building = 'Block E'
+WHERE classroom_id = 2;
+-- Cynthia: Update one classroom
 
+UPDATE Classroom
+SET capacity = 55
+WHERE classroom_id = 3;
 
 );
 
