@@ -69,7 +69,23 @@ CREATE TABLE Courses (
     faculty_id INT,
     FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id)
 );
+INSERT INTO Courses (course_name, course_code, credits, faculty_id, classroom_id)
+VALUES
+('Database Systems', 'CS201', 3, 1, 1),
+('Computer Networks', 'CS202', 3, 2, 2),
+('Software Engineering', 'CS203', 4, 3, 3),
+('Web Development', 'CS204', 3, 4, 4),
+('Artificial Intelligence', 'CS205', 4, 5, 5);
+UPDATE Courses
+SET credits = 5
+WHERE course_code = 'CS205';
 
+DELETE FROM Courses
+WHERE course_code = 'CS204';
+
+SELECT *
+FROM Courses
+WHERE credits >= 4;
 
 
 
@@ -78,8 +94,6 @@ CREATE TABLE Courses (
    SECTION 5 - EXTRA CURRICULAR ACTIVITIES (Rosette)
    Branch: Extra_Curricular_Activities
     */
-
-
 
 
 
