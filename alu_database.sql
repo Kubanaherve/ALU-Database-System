@@ -35,6 +35,17 @@ CREATE TABLE Classroom (
     floor INT NOT NULL
 );
 
+-- Faculty / lecturers (Rebecca)
+CREATE TABLE Faculty (
+    faculty_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    department VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    hire_date DATE NOT NULL
+);
+
 
 -- sample data (Rwandan names, ALU Kigali vibe)
 
@@ -53,6 +64,14 @@ INSERT INTO Classroom (classroom_id, room_number, building_name, capacity, floor
 (4, 'C301', 'Ikigo cy''Ubumenyi', 60, 3),
 (5, 'D401', 'Inyubako y''Ubucuruzi', 45, 4),
 (6, 'E105', 'Aho Abanyeshuri Bahanira', 30, 1);
+
+INSERT INTO Faculty (faculty_id, first_name, last_name, email, department, phone, hire_date) VALUES
+(1, 'Jean Bosco', 'Mutangana', 'j.mutangana@alueducation.com', 'Computer Science', '+250788200001', '2018-02-01'),
+(2, 'Aline', 'Uwase', 'a.uwase@alueducation.com', 'Entrepreneurial Leadership', '+250788200002', '2017-09-15'),
+(3, 'Emmanuel', 'Nkurunziza', 'e.nkurunziza@alueducation.com', 'Data Science', '+250788200003', '2019-01-20'),
+(4, 'Chantal', 'Mukamana', 'c.mukamana@alueducation.com', 'Software Engineering', '+250788200004', '2016-08-10'),
+(5, 'Patrick', 'Habimana', 'p.habimana@alueducation.com', 'International Business', '+250788200005', '2020-03-01'),
+(6, 'Grace', 'Uwamahoro', 'g.uwamahoro@alueducation.com', 'Communication', '+250788200006', '2021-05-12');
 
 
 -- individual UPDATE / DELETE / SELECT
@@ -75,6 +94,16 @@ SELECT classroom_id, room_number, building_name, capacity
 FROM Classroom
 WHERE capacity >= 40;
 
+-- Rebecca
+UPDATE Faculty
+SET department = 'Computer Science & Engineering'
+WHERE faculty_id = 1;
+
+SELECT faculty_id, first_name, last_name, department, email
+FROM Faculty
+WHERE department LIKE '%Science%';
+
 -- deletes (do junction / child rows first so FKs don't break)
 DELETE FROM Students WHERE student_id = 6;
 DELETE FROM Classroom WHERE classroom_id = 6;
+DELETE FROM Faculty WHERE faculty_id = 6;
