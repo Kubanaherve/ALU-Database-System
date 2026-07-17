@@ -64,6 +64,23 @@ CREATE TABLE Faculty (
 );
 
 
+/* Courses - Member D: Sonia | Branch: course-sonia
+   Depends on: Faculty, Classroom */
+CREATE TABLE Courses (
+    course_id    INT AUTO_INCREMENT PRIMARY KEY,
+    course_name  VARCHAR(100) NOT NULL,
+    course_code  VARCHAR(20)  NOT NULL UNIQUE,
+    credits      INT          NOT NULL,
+    faculty_id   INT          NOT NULL,
+    classroom_id INT          NOT NULL,
+    CONSTRAINT chk_course_credits CHECK (credits > 0),
+    CONSTRAINT fk_courses_faculty
+        FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id),
+    CONSTRAINT fk_courses_classroom
+        FOREIGN KEY (classroom_id) REFERENCES Classroom(classroom_id)
+);
+
+
 /* =============================================================================
    SECTION 2 - INSERT SAMPLE DATA (Rwandan / ALU Kigali examples)
    Six rows per base table: rows 1-5 power the joins; row 6 is deleted later
@@ -107,6 +124,19 @@ VALUES
 (6, 'Grace',      'Uwamahoro',  'g.uwamahoro@alueducation.com',  'Communication',              '+250788200006', '2021-05-12');
 
 
+/* Courses - Sonia
+   Course 6 reuses faculty 1 / classroom 1 so faculty 6 and classroom 6 stay deletable. */
+INSERT INTO Courses
+    (course_id, course_name, course_code, credits, faculty_id, classroom_id)
+VALUES
+(1, 'Database Systems',           'CS201', 3, 1, 1),
+(2, 'Entrepreneurial Leadership', 'EL101', 4, 2, 3),
+(3, 'Data Analytics for Africa',  'DS210', 3, 3, 4),
+(4, 'Software Engineering',       'SE220', 4, 4, 2),
+(5, 'International Business',     'IB150', 3, 5, 5),
+(6, 'Public Speaking & Debate',   'CM110', 2, 1, 1);
+
+
 /* =============================================================================
    SECTION 3 - INDIVIDUAL DML
    ============================================================================= */
@@ -115,9 +145,6 @@ VALUES
 UPDATE Students
 SET email = 'aline.uwimana@student.alueducation.com'
 WHERE student_id = 1;
-
-DELETE FROM Students
-WHERE student_id = 6;
 
 SELECT student_id, first_name, last_name, email
 FROM Students
@@ -128,9 +155,6 @@ UPDATE Classroom
 SET capacity = 55
 WHERE classroom_id = 3;
 
-DELETE FROM Classroom
-WHERE classroom_id = 6;
-
 SELECT classroom_id, room_number, building_name, capacity
 FROM Classroom
 WHERE capacity >= 40;
@@ -140,9 +164,21 @@ UPDATE Faculty
 SET department = 'Computer Science & Engineering'
 WHERE faculty_id = 1;
 
-DELETE FROM Faculty
-WHERE faculty_id = 6;
-
 SELECT faculty_id, first_name, last_name, department, email
 FROM Faculty
 WHERE department LIKE '%Science%';
+
+/* --- Sonia (Courses) --- */
+UPDATE Courses
+SET credits = 5
+WHERE course_code = 'DS210';
+
+SELECT course_id, course_name, course_code, credits
+FROM Courses
+WHERE credits >= 4;
+
+/* Deletes — children first */
+DELETE FROM Courses WHERE course_id = 6; /* Sonia */
+DELETE FROM Students WHERE student_id = 6; /* Joshua */
+DELETE FROM Classroom WHERE classroom_id = 6; /* Cynthia */
+DELETE FROM Faculty WHERE faculty_id = 6; /* Rebecca */
