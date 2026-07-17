@@ -41,6 +41,17 @@ CREATE TABLE Students (
 );
 
 
+/* Classroom - Member B: Cynthia | Branch: classroom-cynthia */
+CREATE TABLE Classroom (
+    classroom_id  INT AUTO_INCREMENT PRIMARY KEY,
+    room_number   VARCHAR(10)  NOT NULL,
+    building_name VARCHAR(50)  NOT NULL,
+    capacity      INT          NOT NULL,
+    floor         INT          NOT NULL,
+    CONSTRAINT chk_classroom_capacity CHECK (capacity > 0)
+);
+
+
 /* =============================================================================
    SECTION 2 - INSERT SAMPLE DATA (Rwandan / ALU Kigali examples)
    Six rows per base table: rows 1-5 power the joins; row 6 is deleted later
@@ -60,6 +71,18 @@ VALUES
 (6, 'Jean Paul', 'Bizimana',   'jp.bizimana@alustudent.com',       '2004-07-08', '+250788100006', 'Male');
 
 
+/* Classroom - Cynthia (ALU Kigali campus style) */
+INSERT INTO Classroom
+    (classroom_id, room_number, building_name, capacity, floor)
+VALUES
+(1, 'A101', 'Innovation Building', 40, 1),
+(2, 'A102', 'Innovation Building', 35, 1),
+(3, 'B201', 'Leadership Building', 50, 2),
+(4, 'C301', 'Science & Tech Hub',  60, 3),
+(5, 'D401', 'Business Pavilion',   45, 4),
+(6, 'E105', 'Student Commons',     30, 1);
+
+
 /* =============================================================================
    SECTION 3 - INDIVIDUAL DML
    ============================================================================= */
@@ -75,3 +98,15 @@ WHERE student_id = 6;
 SELECT student_id, first_name, last_name, email
 FROM Students
 WHERE last_name = 'Uwimana';
+
+/* --- Cynthia (Classroom) --- */
+UPDATE Classroom
+SET capacity = 55
+WHERE classroom_id = 3;
+
+DELETE FROM Classroom
+WHERE classroom_id = 6;
+
+SELECT classroom_id, room_number, building_name, capacity
+FROM Classroom
+WHERE capacity >= 40;
