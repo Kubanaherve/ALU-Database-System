@@ -26,6 +26,15 @@ CREATE TABLE Students (
     gender ENUM('Male', 'Female', 'Other') NOT NULL
 );
 
+-- Classroom table (Cynthia)
+CREATE TABLE Classroom (
+    classroom_id INT AUTO_INCREMENT PRIMARY KEY,
+    room_number VARCHAR(10) NOT NULL,
+    building_name VARCHAR(50) NOT NULL,
+    capacity INT NOT NULL,
+    floor INT NOT NULL
+);
+
 
 -- sample data (Rwandan names, ALU Kigali vibe)
 
@@ -36,6 +45,14 @@ INSERT INTO Students (student_id, first_name, last_name, email, date_of_birth, p
 (4, 'Eric', 'Habimana', 'eric.habimana@alustudent.com', '2004-09-12', '+250788100004', 'Male'),
 (5, 'Diane', 'Iradukunda', 'diane.iradukunda@alustudent.com', '2005-11-30', '+250788100005', 'Female'),
 (6, 'Jean Paul', 'Bizimana', 'jp.bizimana@alustudent.com', '2004-07-08', '+250788100006', 'Male');
+
+INSERT INTO Classroom (classroom_id, room_number, building_name, capacity, floor) VALUES
+(1, 'A101', 'Inyubako y''Ubuhanga', 40, 1),
+(2, 'A102', 'Inyubako y''Ubuhanga', 35, 1),
+(3, 'B201', 'Inyubako y''Ubuyobozi', 50, 2),
+(4, 'C301', 'Ikigo cy''Ubumenyi', 60, 3),
+(5, 'D401', 'Inyubako y''Ubucuruzi', 45, 4),
+(6, 'E105', 'Aho Abanyeshuri Bahanira', 30, 1);
 
 
 -- individual UPDATE / DELETE / SELECT
@@ -49,5 +66,15 @@ SELECT student_id, first_name, last_name, email
 FROM Students
 WHERE last_name = 'Uwimana';
 
+-- Cynthia
+UPDATE Classroom
+SET capacity = 55
+WHERE classroom_id = 3;
+
+SELECT classroom_id, room_number, building_name, capacity
+FROM Classroom
+WHERE capacity >= 40;
+
 -- deletes (do junction / child rows first so FKs don't break)
 DELETE FROM Students WHERE student_id = 6;
+DELETE FROM Classroom WHERE classroom_id = 6;
