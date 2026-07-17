@@ -71,6 +71,25 @@ CREATE TABLE Extra_Curricular_Activities (
     FOREIGN KEY (classroom_id) REFERENCES Classroom(classroom_id)
 );
 
+-- Junction tables for many-to-many (Marvella)
+CREATE TABLE Student_Courses (
+    student_id INT NOT NULL,
+    course_id INT NOT NULL,
+    enrollment_date DATE NOT NULL,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
+);
+
+CREATE TABLE Student_Activities (
+    student_id INT NOT NULL,
+    activity_id INT NOT NULL,
+    join_date DATE NOT NULL,
+    PRIMARY KEY (student_id, activity_id),
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (activity_id) REFERENCES Extra_Curricular_Activities(activity_id)
+);
+
 
 -- sample data (Rwandan names, ALU Kigali vibe)
 
@@ -113,6 +132,29 @@ INSERT INTO Extra_Curricular_Activities (activity_id, activity_name, activity_ty
 (4, 'Robotics & Innovation', 'STEM', 'Thursday', '15:00:00', 1, 4),
 (5, 'Umuganda Outreach', 'Service', 'Friday', '14:00:00', 3, 5),
 (6, 'Chess Club', 'Academic', 'Saturday', '10:00:00', 4, 2);
+
+INSERT INTO Student_Courses (student_id, course_id, enrollment_date) VALUES
+(1, 1, '2025-09-01'),
+(1, 2, '2025-09-01'),
+(2, 1, '2025-09-01'),
+(2, 3, '2025-09-02'),
+(3, 4, '2025-09-01'),
+(3, 2, '2025-09-03'),
+(4, 3, '2025-09-01'),
+(4, 5, '2025-09-02'),
+(5, 1, '2025-09-01'),
+(5, 4, '2025-09-04');
+
+INSERT INTO Student_Activities (student_id, activity_id, join_date) VALUES
+(1, 1, '2025-09-10'),
+(1, 2, '2025-09-12'),
+(2, 4, '2025-09-11'),
+(3, 1, '2025-09-10'),
+(3, 3, '2025-09-15'),
+(4, 2, '2025-09-12'),
+(4, 5, '2025-09-18'),
+(5, 3, '2025-09-15'),
+(5, 4, '2025-09-20');
 
 
 -- individual UPDATE / DELETE / SELECT
@@ -162,7 +204,26 @@ SELECT activity_id, activity_name, activity_type, meeting_day
 FROM Extra_Curricular_Activities
 WHERE activity_type = 'Academic';
 
+-- Marvella
+UPDATE Student_Courses
+SET enrollment_date = '2025-09-05'
+WHERE student_id = 1 AND course_id = 2;
+
+SELECT student_id, course_id, enrollment_date
+FROM Student_Courses
+WHERE student_id = 1;
+
+UPDATE Student_Activities
+SET join_date = '2025-09-22'
+WHERE student_id = 2 AND activity_id = 4;
+
+SELECT student_id, activity_id, join_date
+FROM Student_Activities
+WHERE activity_id = 1;
+
 -- deletes (do junction / child rows first so FKs don't break)
+DELETE FROM Student_Courses WHERE student_id = 5 AND course_id = 4;
+DELETE FROM Student_Activities WHERE student_id = 5 AND activity_id = 4;
 DELETE FROM Courses WHERE course_id = 6;
 DELETE FROM Extra_Curricular_Activities WHERE activity_id = 6;
 DELETE FROM Students WHERE student_id = 6;
