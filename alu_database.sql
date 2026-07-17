@@ -229,3 +229,56 @@ DELETE FROM Extra_Curricular_Activities WHERE activity_id = 6;
 DELETE FROM Students WHERE student_id = 6;
 DELETE FROM Classroom WHERE classroom_id = 6;
 DELETE FROM Faculty WHERE faculty_id = 6;
+
+
+-- group join queries (Friend)
+
+-- Student X is enrolled in Course Y, taught by Faculty Z, in Classroom W.
+SELECT CONCAT(
+    s.first_name, ' ', s.last_name,
+    ' is enrolled in ', c.course_name, ' (', c.course_code, '), taught by ',
+    f.first_name, ' ', f.last_name,
+    ', in classroom ', cl.room_number, ' (', cl.building_name, ').'
+) AS full_sentence
+FROM Students s
+JOIN Student_Courses sc ON s.student_id = sc.student_id
+JOIN Courses c ON sc.course_id = c.course_id
+JOIN Faculty f ON c.faculty_id = f.faculty_id
+JOIN Classroom cl ON c.classroom_id = cl.classroom_id
+ORDER BY s.last_name, c.course_code;
+
+-- Student X participates in Activity Y, advised by Faculty Z.
+SELECT CONCAT(
+    s.first_name, ' ', s.last_name,
+    ' participates in ', a.activity_name,
+    ', advised by ', f.first_name, ' ', f.last_name, '.'
+) AS full_sentence
+FROM Students s
+JOIN Student_Activities sa ON s.student_id = sa.student_id
+JOIN Extra_Curricular_Activities a ON sa.activity_id = a.activity_id
+JOIN Faculty f ON a.faculty_id = f.faculty_id
+ORDER BY s.last_name, a.activity_name;
+
+-- extra join: course + room + how many students
+SELECT CONCAT(
+    c.course_name, ' (', c.course_code, ') meets in ',
+    cl.room_number, ' - ', cl.building_name,
+    ' and has ', COUNT(sc.student_id), ' student(s).'
+) AS full_sentence
+FROM Courses c
+JOIN Classroom cl ON c.classroom_id = cl.classroom_id
+LEFT JOIN Student_Courses sc ON c.course_id = sc.course_id
+GROUP BY c.course_id, c.course_name, c.course_code, cl.room_number, cl.building_name
+ORDER BY c.course_code;
+
+-- aggregate: how many students in each course
+SELECT
+    c.course_code,
+    c.course_name,
+    CONCAT(f.first_name, ' ', f.last_name) AS taught_by,
+    COUNT(sc.student_id) AS total_students
+FROM Courses c
+JOIN Faculty f ON c.faculty_id = f.faculty_id
+LEFT JOIN Student_Courses sc ON c.course_id = sc.course_id
+GROUP BY c.course_id, c.course_code, c.course_name, f.first_name, f.last_name
+ORDER BY total_students DESC, c.course_code;
