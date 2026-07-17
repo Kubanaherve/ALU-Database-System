@@ -81,6 +81,24 @@ CREATE TABLE Courses (
 );
 
 
+/* Extra_Curricular_Activities - Member E: Rosette
+   Branch: Extra_Curricular_Activities
+   Depends on: Faculty, Classroom */
+CREATE TABLE Extra_Curricular_Activities (
+    activity_id   INT AUTO_INCREMENT PRIMARY KEY,
+    activity_name VARCHAR(100) NOT NULL,
+    activity_type VARCHAR(50)  NOT NULL,
+    meeting_day   VARCHAR(20)  NOT NULL,
+    meeting_time  TIME         NOT NULL,
+    faculty_id    INT          NOT NULL,
+    classroom_id  INT          NOT NULL,
+    CONSTRAINT fk_activities_faculty
+        FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id),
+    CONSTRAINT fk_activities_classroom
+        FOREIGN KEY (classroom_id) REFERENCES Classroom(classroom_id)
+);
+
+
 /* =============================================================================
    SECTION 2 - INSERT SAMPLE DATA (Rwandan / ALU Kigali examples)
    Six rows per base table: rows 1-5 power the joins; row 6 is deleted later
@@ -137,6 +155,19 @@ VALUES
 (6, 'Public Speaking & Debate',   'CM110', 2, 1, 1);
 
 
+/* Extra_Curricular_Activities - Rosette
+   Activity 6 reuses existing faculty/classroom so row 6 targets stay deletable. */
+INSERT INTO Extra_Curricular_Activities
+    (activity_id, activity_name, activity_type, meeting_day, meeting_time, faculty_id, classroom_id)
+VALUES
+(1, 'ALU Football Club',     'Sports',   'Monday',    '16:00:00', 5, 1),
+(2, 'Kigali Debate Society', 'Academic', 'Tuesday',   '15:30:00', 2, 3),
+(3, 'Intore Dance Ensemble', 'Arts',     'Wednesday', '16:30:00', 2, 1),
+(4, 'Robotics & Innovation', 'STEM',     'Thursday',  '15:00:00', 1, 4),
+(5, 'Umuganda Outreach',     'Service',  'Friday',    '14:00:00', 3, 5),
+(6, 'Chess Masters Club',    'Academic', 'Saturday',  '10:00:00', 4, 2);
+
+
 /* =============================================================================
    SECTION 3 - INDIVIDUAL DML
    ============================================================================= */
@@ -177,8 +208,18 @@ SELECT course_id, course_name, course_code, credits
 FROM Courses
 WHERE credits >= 4;
 
+/* --- Rosette (Extra_Curricular_Activities) --- */
+UPDATE Extra_Curricular_Activities
+SET meeting_day = 'Thursday'
+WHERE activity_id = 3;
+
+SELECT activity_id, activity_name, activity_type, meeting_day
+FROM Extra_Curricular_Activities
+WHERE activity_type = 'Academic';
+
 /* Deletes — children first */
 DELETE FROM Courses WHERE course_id = 6; /* Sonia */
+DELETE FROM Extra_Curricular_Activities WHERE activity_id = 6; /* Rosette */
 DELETE FROM Students WHERE student_id = 6; /* Joshua */
 DELETE FROM Classroom WHERE classroom_id = 6; /* Cynthia */
 DELETE FROM Faculty WHERE faculty_id = 6; /* Rebecca */
