@@ -46,6 +46,18 @@ CREATE TABLE Faculty (
     hire_date DATE NOT NULL
 );
 
+-- Courses needs Faculty and Classroom first (Sonia)
+CREATE TABLE Courses (
+    course_id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    course_code VARCHAR(20) NOT NULL UNIQUE,
+    credits INT NOT NULL,
+    faculty_id INT NOT NULL,
+    classroom_id INT NOT NULL,
+    FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id),
+    FOREIGN KEY (classroom_id) REFERENCES Classroom(classroom_id)
+);
+
 
 -- sample data (Rwandan names, ALU Kigali vibe)
 
@@ -72,6 +84,14 @@ INSERT INTO Faculty (faculty_id, first_name, last_name, email, department, phone
 (4, 'Chantal', 'Mukamana', 'c.mukamana@alueducation.com', 'Software Engineering', '+250788200004', '2016-08-10'),
 (5, 'Patrick', 'Habimana', 'p.habimana@alueducation.com', 'International Business', '+250788200005', '2020-03-01'),
 (6, 'Grace', 'Uwamahoro', 'g.uwamahoro@alueducation.com', 'Communication', '+250788200006', '2021-05-12');
+
+INSERT INTO Courses (course_id, course_name, course_code, credits, faculty_id, classroom_id) VALUES
+(1, 'Database Systems', 'CS201', 3, 1, 1),
+(2, 'Entrepreneurial Leadership', 'EL101', 4, 2, 3),
+(3, 'Data Analytics for Africa', 'DS210', 3, 3, 4),
+(4, 'Software Engineering', 'SE220', 4, 4, 2),
+(5, 'International Business', 'IB150', 3, 5, 5),
+(6, 'Public Speaking & Debate', 'CM110', 2, 1, 1);
 
 
 -- individual UPDATE / DELETE / SELECT
@@ -103,7 +123,17 @@ SELECT faculty_id, first_name, last_name, department, email
 FROM Faculty
 WHERE department LIKE '%Science%';
 
+-- Sonia
+UPDATE Courses
+SET credits = 5
+WHERE course_code = 'DS210';
+
+SELECT course_id, course_name, course_code, credits
+FROM Courses
+WHERE credits >= 4;
+
 -- deletes (do junction / child rows first so FKs don't break)
+DELETE FROM Courses WHERE course_id = 6;
 DELETE FROM Students WHERE student_id = 6;
 DELETE FROM Classroom WHERE classroom_id = 6;
 DELETE FROM Faculty WHERE faculty_id = 6;
