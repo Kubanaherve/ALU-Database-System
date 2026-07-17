@@ -52,6 +52,18 @@ CREATE TABLE Classroom (
 );
 
 
+/* Faculty (individual lecturers) - Member C: Rebecca | Branch: faculty-rebecca */
+CREATE TABLE Faculty (
+    faculty_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50)  NOT NULL,
+    last_name  VARCHAR(50)  NOT NULL,
+    email      VARCHAR(100) NOT NULL UNIQUE,
+    department VARCHAR(100) NOT NULL,
+    phone      VARCHAR(20),
+    hire_date  DATE         NOT NULL
+);
+
+
 /* =============================================================================
    SECTION 2 - INSERT SAMPLE DATA (Rwandan / ALU Kigali examples)
    Six rows per base table: rows 1-5 power the joins; row 6 is deleted later
@@ -83,6 +95,18 @@ VALUES
 (6, 'E105', 'Student Commons',     30, 1);
 
 
+/* Faculty - Rebecca (ALU Kigali lecturers) */
+INSERT INTO Faculty
+    (faculty_id, first_name, last_name, email, department, phone, hire_date)
+VALUES
+(1, 'Jean Bosco', 'Mutangana',  'j.mutangana@alueducation.com',  'Computer Science',           '+250788200001', '2018-02-01'),
+(2, 'Aline',      'Uwase',      'a.uwase@alueducation.com',      'Entrepreneurial Leadership', '+250788200002', '2017-09-15'),
+(3, 'Emmanuel',   'Nkurunziza', 'e.nkurunziza@alueducation.com', 'Data Science',               '+250788200003', '2019-01-20'),
+(4, 'Chantal',    'Mukamana',   'c.mukamana@alueducation.com',   'Software Engineering',       '+250788200004', '2016-08-10'),
+(5, 'Patrick',    'Habimana',   'p.habimana@alueducation.com',   'International Business',     '+250788200005', '2020-03-01'),
+(6, 'Grace',      'Uwamahoro',  'g.uwamahoro@alueducation.com',  'Communication',              '+250788200006', '2021-05-12');
+
+
 /* =============================================================================
    SECTION 3 - INDIVIDUAL DML
    ============================================================================= */
@@ -110,3 +134,15 @@ WHERE classroom_id = 6;
 SELECT classroom_id, room_number, building_name, capacity
 FROM Classroom
 WHERE capacity >= 40;
+
+/* --- Rebecca (Faculty) --- */
+UPDATE Faculty
+SET department = 'Computer Science & Engineering'
+WHERE faculty_id = 1;
+
+DELETE FROM Faculty
+WHERE faculty_id = 6;
+
+SELECT faculty_id, first_name, last_name, department, email
+FROM Faculty
+WHERE department LIKE '%Science%';
