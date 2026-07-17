@@ -58,6 +58,19 @@ CREATE TABLE Courses (
     FOREIGN KEY (classroom_id) REFERENCES Classroom(classroom_id)
 );
 
+-- Activities / clubs, advised by a faculty member (Rosette)
+CREATE TABLE Extra_Curricular_Activities (
+    activity_id INT AUTO_INCREMENT PRIMARY KEY,
+    activity_name VARCHAR(100) NOT NULL,
+    activity_type VARCHAR(50) NOT NULL,
+    meeting_day VARCHAR(20) NOT NULL,
+    meeting_time TIME NOT NULL,
+    faculty_id INT NOT NULL,
+    classroom_id INT NOT NULL,
+    FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id),
+    FOREIGN KEY (classroom_id) REFERENCES Classroom(classroom_id)
+);
+
 
 -- sample data (Rwandan names, ALU Kigali vibe)
 
@@ -92,6 +105,14 @@ INSERT INTO Courses (course_id, course_name, course_code, credits, faculty_id, c
 (4, 'Software Engineering', 'SE220', 4, 4, 2),
 (5, 'International Business', 'IB150', 3, 5, 5),
 (6, 'Public Speaking & Debate', 'CM110', 2, 1, 1);
+
+INSERT INTO Extra_Curricular_Activities (activity_id, activity_name, activity_type, meeting_day, meeting_time, faculty_id, classroom_id) VALUES
+(1, 'ALU Football Club', 'Sports', 'Monday', '16:00:00', 5, 1),
+(2, 'Kigali Debate Society', 'Academic', 'Tuesday', '15:30:00', 2, 3),
+(3, 'Intore Dance Ensemble', 'Arts', 'Wednesday', '16:30:00', 2, 1),
+(4, 'Robotics & Innovation', 'STEM', 'Thursday', '15:00:00', 1, 4),
+(5, 'Umuganda Outreach', 'Service', 'Friday', '14:00:00', 3, 5),
+(6, 'Chess Club', 'Academic', 'Saturday', '10:00:00', 4, 2);
 
 
 -- individual UPDATE / DELETE / SELECT
@@ -132,8 +153,18 @@ SELECT course_id, course_name, course_code, credits
 FROM Courses
 WHERE credits >= 4;
 
+-- Rosette
+UPDATE Extra_Curricular_Activities
+SET meeting_day = 'Thursday'
+WHERE activity_id = 3;
+
+SELECT activity_id, activity_name, activity_type, meeting_day
+FROM Extra_Curricular_Activities
+WHERE activity_type = 'Academic';
+
 -- deletes (do junction / child rows first so FKs don't break)
 DELETE FROM Courses WHERE course_id = 6;
+DELETE FROM Extra_Curricular_Activities WHERE activity_id = 6;
 DELETE FROM Students WHERE student_id = 6;
 DELETE FROM Classroom WHERE classroom_id = 6;
 DELETE FROM Faculty WHERE faculty_id = 6;
